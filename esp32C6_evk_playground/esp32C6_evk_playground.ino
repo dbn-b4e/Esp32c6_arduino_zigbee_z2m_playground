@@ -37,14 +37,14 @@
 #error "Zigbee coordinator/router device mode is not selected in Tools->Zigbee mode"
 #endif
 
+#include <Arduino.h>
 #include "Zigbee.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
-//#include <CommandParser>  // https://github.com/sivar2311/CommandParser/
-#include "./lib/CommandParser/src/CommandParser.h" // https://github.com/sivar2311/CommandParser/
+#include "CommandParser.h" // https://github.com/sivar2311/CommandParser/
 #include <jled.h>
 #include <string>
 
@@ -100,7 +100,7 @@ int32_t timezone;
 OneWire oneWire(ONE_WIRE_BUS);
 
 // Command parser
-CommandParser cp;
+CommandParser cp(Serial);
 
 
 // DHT21 (AM2301)
@@ -509,14 +509,12 @@ void setup() {
   
 
   // Initialise command parser callbacks
-  cp.onCommand("hello", handleHello);
-  cp.onCommand("meminfo", handle_meminfo);
-  cp.onCommand("temp", handleTemp, CommandParser::CaseSensivity::IGNORE);
-  cp.onCommand("count", handleCount);
-  cp.onOverflow(handleOverflow);
-  cp.onCommand("reset", handleReset);
-  
-  cp.onNotFound(handleNotFound);
+    cp.onCommand("hello", handleHello, "[name|string (optional)]");
+    //cp.onCommand("temp", handleTemp, "[temperature|number]", CommandParser::CaseSensivity::IGNORE);
+    cp.onCommand("count", handleCount, "[from|number] [to|number]");
+    //cp.onCommand("reset", handleReset, "[zigbee or board]", CommandParser::CaseSensivity::IGNORE);
+    cp.onOverflow(handleOverflow);
+    cp.onNotFound(handleNotFound);
 
   // Terminal console task
   xTaskCreateUniversal(tsk_console,"tsk_console", 16*1024, NULL, 2, &tsk_console_task, ARDUINO_RUNNING_CORE);

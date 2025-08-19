@@ -2,13 +2,15 @@
 
 static const char* delimiters = " \r\n";
 
-CommandParser::CommandHandlerInfo::CommandHandlerInfo(const String& command, CommandHandler handler, CaseSensivity cs)
+CommandParser::CommandHandlerInfo::CommandHandlerInfo(const String& command, CommandHandler handler, String helpText, CaseSensivity cs)
     : cmd(command)
     , handler(handler)
+    , helpText(helpText)
     , cs(cs) {}
 
-CommandParser::CommandParser(size_t buffer_size)
-    : buffer_size(buffer_size) {
+CommandParser::CommandParser(Stream& stream, size_t buffer_size)
+    : stream(stream)
+    , buffer_size(buffer_size) {
     buffer = new char[buffer_size];
 }
 
@@ -42,9 +44,20 @@ void CommandParser::processFromStream(Stream& stream, bool echo) {
         addChar(c);
     }
 }
+void CommandParser::processCommands(bool echo) {
+    while (stream.available()) {
+        char c = stream.read();
+        if (echo) stream.write(c);
+        addChar(c);
+    }
+}
 
 void CommandParser::onCommand(const String& command, CommandHandler handler, CaseSensivity cs) {
-    commandHandlers.push_back(CommandHandlerInfo(command, handler, cs));
+    commandHandlers.push_back(CommandHandlerInfo(command, handler, "", cs));
+}
+
+void CommandParser::onCommand(const String& command, CommandHandler handler, String helpText, CaseSensivity cs) {
+    commandHandlers.push_back(CommandHandlerInfo(command, handler, helpText, cs));
 }
 
 void CommandParser::onNotFound(CommandHandler handler) {
@@ -87,9 +100,9 @@ void CommandParser::handleCommand() {
     if (parameters.size() == 0) return;
     String command = parameters[0];
 
-    for (auto& handlerInfo : commandHandlers) {
-        bool found = false;
+    if (command == "help") return handleHelp(parameters);
 
+    for (auto& handlerInfo : commandHandlers) {
         if ((handlerInfo.cs == CaseSensivity::IGNORE && handlerInfo.cmd.equalsIgnoreCase(command)) ||
             (handlerInfo.cs == CaseSensivity::EQUALS && handlerInfo.cmd.equals(command))) {
             handlerInfo.handler(parameters);
@@ -101,4 +114,18 @@ void CommandParser::handleCommand() {
     if (notFoundHandler) notFoundHandler(parameters);
 
     resetIndex();
+}
+
+void CommandParser::handleHelp(const std::vector<String>& params) {
+    if (params.size() < 2) {
+        stream.println("\r\nAvailable commands:\r\nhelp\r\nhelp [command]\r\n");
+        for (auto& handlerInfo : commandHandlers) { 
+            stream.printf("%s %s\r\n", handlerInfo.cmd.c_str(), handlerInfo.helpText.c_str());
+        }
+        stream.println();
+    } else {
+        for (auto handlerInfo : commandHandlers) {
+            if (handlerInfo.cmd.equalsIgnoreCase(params[1])) stream.printf("%s %s\r\n", handlerInfo.cmd.c_str(), handlerInfo.helpText.c_str());
+        }
+    }
 }
