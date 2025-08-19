@@ -43,8 +43,19 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
-#include <CommandParser.h>  // https://github.com/sivar2311/CommandParser/
+//#include <CommandParser>  // https://github.com/sivar2311/CommandParser/
+#include "./lib/CommandParser/src/CommandParser.h" // https://github.com/sivar2311/CommandParser/
 #include <jled.h>
+#include <string>
+
+enum string_code_e {
+    eZb_reset = 1,
+    eBrd_reset
+};
+// typedef string_code_e string_code_t;
+
+
+//string_code_t hashit();
 
 /* Zigbee multistate device configuration */
 #define MULTISTATE_DEVICE_ENDPOINT_NUMBER 1
@@ -134,7 +145,8 @@ void setRelay(bool value)
   digitalWrite(relay_pin, value);
 }
 
-void handleHello(const std::vector<String>& params) {
+void handleHello(const std::vector<String>& params)
+{
     if (params.size() > 2) {
         Serial.printf("Hello %s! Nice to meet you!\r\n", params[1].c_str());
     } else {
@@ -142,7 +154,8 @@ void handleHello(const std::vector<String>& params) {
     }
 }
 
-void handle_meminfo(const std::vector<String>& params) {
+void handle_meminfo(const std::vector<String>& params)
+{
 
     IPAddress ip;
     if (ip.fromString(params[1])) {
@@ -152,7 +165,8 @@ void handle_meminfo(const std::vector<String>& params) {
     }
 }
 
-void handleTemp(const std::vector<String>& params) {
+void handleTemp(const std::vector<String>& params)
+{
   if (params.size() < 2) {
     Serial.println("Please provide a temperature as parameter");
     return;
@@ -162,8 +176,10 @@ void handleTemp(const std::vector<String>& params) {
   Serial.printf("Temperature set to %f\r\n", temperature);
 }
 
-void handleCount(const std::vector<String>& params) {
-    if (params.size() < 3) {
+void handleCount(const std::vector<String>& params)
+{
+    if (params.size() < 3)
+    {
         Serial.println("Count <from> <to>");
         return;
     }
@@ -171,10 +187,47 @@ void handleCount(const std::vector<String>& params) {
     size_t from = params[1].toInt();
     size_t to = params[2].toInt();
 
-    for (size_t i = from; i<=to; i++) {
+    for (size_t i = from; i<=to; i++)
+    {
         Serial.println(i);
     }
 }
+
+
+
+
+enum string_code_e hashit (std::string const& inString)
+{
+    if (inString == "zigbee") return eZb_reset;
+    if (inString == "board") return eBrd_reset;
+}
+
+
+
+void handleReset(const std::vector<String>& params)
+{
+  if (params.size() < 2)
+  {
+    Serial.println("Usage: 'reset zigbee' / 'reset board' ");
+    return;
+  }
+
+  switch (hashit(params[1].c_str()))
+  {
+    case eZb_reset:
+        Serial.println("Resetting Zigbee to factory and rebooting in 1s.");
+        delay(1000);
+        Zigbee.factoryReset();
+      break;
+    case eBrd_reset:
+      Serial.println("Resetting board");
+      break;
+    default:
+      Serial.println("Invalid commandd");
+      break;
+  }
+}
+
 
 
 void handleNotFound(const std::vector<String>& params) {
@@ -460,6 +513,8 @@ void setup() {
   cp.onCommand("temp", handleTemp, CommandParser::CaseSensivity::IGNORE);
   cp.onCommand("count", handleCount);
   cp.onOverflow(handleOverflow);
+  cp.onCommand("reset", handleReset);
+  
   cp.onNotFound(handleNotFound);
 
   // Terminal console task
