@@ -1,6 +1,3 @@
-[submodule "esp32C6_evk_playground/CommandParser"]
-	path = esp32C6_evk_playground/CommandParser
-	url = https://github.com/sivar2311/CommandParser.git
 [submodule "esp32C6_evk_playground/lib/CommandParser"]
 	path = esp32C6_evk_playground/lib/CommandParser
 	url = https://github.com/sivar2311/CommandParser.git
