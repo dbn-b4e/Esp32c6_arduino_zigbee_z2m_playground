@@ -2,24 +2,19 @@
  *Be sure to read the docs here: https://docs.lvgl.io/master/get-started/platforms/arduino.html  */
 
 #include <lvgl.h>
+
 #include "esp_lcd_touch_axs5106l.h"
 
-/*To use the built-in examples and demos of LVGL uncomment the includes below respectively.
- *You also need to copy `lvgl/examples` to `lvgl/src/examples`. Similarly for the demos `lvgl/demos` to `lvgl/src/demos`.
- Note that the `lv_examples` library is for LVGL v7 and you shouldn't install it for this version (since LVGL v8)
- as the examples and demos are now part of the main LVGL library. */
-
-// #include <examples/lv_examples.h>
-//#include <demos/lv_demos.h>
 #include "ui.h"
 #include "actions.h"
+#include "lvgl_utils.h"
 
 // #define DIRECT_RENDER_MODE // Uncomment to enable full frame buffer
 
 #include <Arduino_GFX_Library.h>
 
-#define ROTATION 1
-// #define ROTATION 1
+// #define ROTATION 0   // Vertical
+#define ROTATION 1      // Horizontal 
 // #define ROTATION 2
 // #define ROTATION 3
 
@@ -34,6 +29,7 @@
 TaskHandle_t tsk_lvgl_loop;
 
 Arduino_DataBus *bus = new Arduino_HWSPI(15 /* DC */, 14 /* CS */, 1 /* SCK */, 2 /* MOSI */);
+
 
 Arduino_GFX *gfx = new Arduino_ST7789(
   bus, 22 /* RST */, 0 /* rotation */, false /* IPS */,
@@ -389,7 +385,8 @@ void setup()
 
     ui_init();
 
-    xTaskCreateUniversal(lvlg_loop,"lvgl_loop", 64*1024, NULL, 3, &tsk_lvgl_loop, ARDUINO_RUNNING_CORE);
+    // Nex task for loop with bigger stack size
+    xTaskCreateUniversal(lvlg_loop,"lvlg_loop", 64*1024, NULL, 3, &tsk_lvgl_loop, ARDUINO_RUNNING_CORE);
 
   }
   Serial.println("Setup done");
