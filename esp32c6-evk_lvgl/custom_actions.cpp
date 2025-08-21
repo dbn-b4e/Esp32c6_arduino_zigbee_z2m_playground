@@ -40,7 +40,7 @@ void action_my_event(lv_event_t *e) {
     }
 }
 
-/*
+
 void action_cb_checked(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
@@ -75,7 +75,7 @@ void action_cb_value_changed(lv_event_t * e) {
     }
     
 }
-*/
+
 void action_spinner_pressed(lv_event_t *e) {
     printf("Spinner pressed ");
 }
