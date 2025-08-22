@@ -8,13 +8,12 @@ extern "C" {
 #endif
 
 typedef struct _objects_t {
+    lv_obj_t *spalsh_screen;
     lv_obj_t *main;
     lv_obj_t *second;
-    lv_obj_t *third;
-    lv_obj_t *fourth;
-    lv_obj_t *fifth;
-    lv_obj_t *sixt;
     lv_obj_t *seventh;
+    lv_obj_t *splash_bg;
+    lv_obj_t *pgs_splash;
     lv_obj_t *lbl_counter;
     lv_obj_t *spin_loading;
     lv_obj_t *cb_1;
@@ -22,37 +21,29 @@ typedef struct _objects_t {
     lv_obj_t *prg_1;
     lv_obj_t *lbl_on_off;
     lv_obj_t *lbl_vbat;
+    lv_obj_t *lbl_vbat_1;
+    lv_obj_t *ctnr_statusbar;
+    lv_obj_t *lbl_uptime;
+    lv_obj_t *lbl_wifi;
 } objects_t;
 
 extern objects_t objects;
 
 enum ScreensEnum {
-    SCREEN_ID_MAIN = 1,
-    SCREEN_ID_SECOND = 2,
-    SCREEN_ID_THIRD = 3,
-    SCREEN_ID_FOURTH = 4,
-    SCREEN_ID_FIFTH = 5,
-    SCREEN_ID_SIXT = 6,
-    SCREEN_ID_SEVENTH = 7,
+    SCREEN_ID_SPALSH_SCREEN = 1,
+    SCREEN_ID_MAIN = 2,
+    SCREEN_ID_SECOND = 3,
+    SCREEN_ID_SEVENTH = 4,
 };
+
+void create_screen_spalsh_screen();
+void tick_screen_spalsh_screen();
 
 void create_screen_main();
 void tick_screen_main();
 
 void create_screen_second();
 void tick_screen_second();
-
-void create_screen_third();
-void tick_screen_third();
-
-void create_screen_fourth();
-void tick_screen_fourth();
-
-void create_screen_fifth();
-void tick_screen_fifth();
-
-void create_screen_sixt();
-void tick_screen_sixt();
 
 void create_screen_seventh();
 void tick_screen_seventh();

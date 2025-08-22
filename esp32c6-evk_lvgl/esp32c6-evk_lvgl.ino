@@ -25,10 +25,21 @@ void loop() {
     uint16_t analogVolts = analogReadMilliVolts(BAT_PIN);
     float vbat = analogVolts * 3.0 / 1000;
     char str_buffer[20];
-
+    char uptime_str[16];
 
     if (millis() - last_update >= 1000) {
         last_update = millis();
+
+        // Calculate uptime
+        unsigned long secs = millis() / 1000;
+        unsigned int hours = secs / 3600;
+        unsigned int mins = (secs % 3600) / 60;
+        unsigned int seconds = secs % 60;
+
+        // Format uptime string
+        snprintf(uptime_str, sizeof(uptime_str), "%02u:%02u:%02u", hours, mins, seconds);
+        lv_label_set_text(objects.lbl_uptime, uptime_str);
+
         int progress = (counter++) % 100;
         sprintf(str_buffer, "%.1f V", vbat);
 
