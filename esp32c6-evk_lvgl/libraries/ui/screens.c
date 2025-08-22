@@ -7,6 +7,7 @@
 #include "vars.h"
 #include "styles.h"
 #include "ui.h"
+
 #include <string.h>
 
 objects_t objects;
@@ -26,13 +27,14 @@ void create_screen_main() {
             // lbl_Counter
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.lbl_counter = obj;
-            lv_obj_set_pos(obj, 156, 6);
+            lv_obj_set_pos(obj, 83, -55);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_PCT(25));
             lv_obj_set_style_text_color(obj, lv_color_hex(0xffffab00), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(obj, &ui_font_ds40, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_letter_space(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text(obj, "0000\n");
+            lv_obj_set_style_align(obj, LV_ALIGN_LEFT_MID, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_label_set_text(obj, "00\n");
         }
         {
             // spin_loading
@@ -80,6 +82,19 @@ void create_screen_main() {
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_text_font(obj, &ui_font_ds25, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_label_set_text(obj, "--");
+        }
+        {
+            // lbl_vbat
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.lbl_vbat = obj;
+            lv_obj_set_pos(obj, 195, -55);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_PCT(25));
+            lv_obj_set_style_text_color(obj, lv_color_hex(0xffffab00), LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &ui_font_ds40, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_letter_space(obj, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_align(obj, LV_ALIGN_LEFT_MID, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_label_set_text(obj, "3.95\n");
         }
     }
     

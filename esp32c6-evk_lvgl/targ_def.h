@@ -19,6 +19,8 @@
 #define TOUCH_RST      20
 #define TOUCH_INT      21
 
+#define BAT_PIN      0
+
 //#define DIRECT_RENDER_MODE
 //#define LV_COLOR_16_SWAP
 //#define CANVAS

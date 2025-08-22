@@ -21,6 +21,7 @@ typedef struct _objects_t {
     lv_obj_t *btn_onoff_1;
     lv_obj_t *prg_1;
     lv_obj_t *lbl_on_off;
+    lv_obj_t *lbl_vbat;
 } objects_t;
 
 extern objects_t objects;

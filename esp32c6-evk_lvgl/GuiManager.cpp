@@ -77,7 +77,8 @@ void GuiManager::touchReadCb(lv_indev_drv_t *indev_drv, lv_indev_data_t *data) {
 
 void GuiManager::startLvglTask() {
     xTaskCreateUniversal(lvglLoopTask, "lvgl_loop", 64*1024, NULL, 3, NULL, ARDUINO_RUNNING_CORE);
-    printf("Lvgl task created");
+    String LVGL_Arduino = String('V') + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
+    printf("Lvgl task created (LVGL version: %s)", LVGL_Arduino);
 }
 
 void GuiManager::lvglLoopTask(void* arg) {
