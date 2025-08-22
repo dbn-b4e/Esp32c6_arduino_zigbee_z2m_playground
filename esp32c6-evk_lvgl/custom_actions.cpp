@@ -41,39 +41,16 @@ void action_my_event(lv_event_t *e) {
 }
 
 
-void action_cb_checked(lv_event_t * e) {
-    lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t * obj = lv_event_get_target(e);
-    bool btn_state = lv_obj_has_state(obj, LV_STATE_CHECKED);
 
-    printf("State: %s\n", btn_state ? "On" : "Off");
-
-    if(code == LV_EVENT_VALUE_CHANGED) {
-        printf("State: %s\n", btn_state ? "On" : "Off");
-        lv_checkbox_set_text(obj, String(btn_state).c_str());
-    }
-    else
-    {
-        lv_checkbox_set_text(obj, "--");
-        printf("CB invalid\n");
-    }
-    
-}
 void action_cb_value_changed(lv_event_t * e) {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
     bool btn_state = lv_obj_has_state(obj, LV_STATE_CHECKED);
 
     if(code == LV_EVENT_VALUE_CHANGED) {
-        printf("State: %s\n", btn_state ? "On" : "Off");
-        lv_checkbox_set_text(obj, String(btn_state).c_str());
+        //printf("State: %s\n", btn_state ? "On" : "Off");
+        lv_checkbox_set_text(obj, btn_state ? "On" : "Off");
     }
-    else
-    {
-        lv_checkbox_set_text(obj, "--");
-        printf("CB invalid\n");
-    }
-    
 }
 
 void action_spinner_pressed(lv_event_t *e) {
@@ -86,8 +63,8 @@ void action_cbx_on_off_changed(lv_event_t *e) {
     bool btn_state = lv_obj_has_state(obj, LV_STATE_CHECKED);
 
     if(code == LV_EVENT_VALUE_CHANGED) {
-        printf("State: %s\n", btn_state ? "On" : "Off");
-        lv_label_set_text(objects.lbl_on_off, String(btn_state).c_str());
+        //printf("State: %s\n", btn_state ? "On" : "Off");
+        lv_label_set_text(objects.lbl_on_off, btn_state ? "On" : "Off");
     }
 }
 

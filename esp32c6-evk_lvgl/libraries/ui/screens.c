@@ -7,19 +7,11 @@
 #include "vars.h"
 #include "styles.h"
 #include "ui.h"
-
 #include <string.h>
 
 objects_t objects;
 lv_obj_t *tick_value_change_obj;
 uint32_t active_theme_index = 0;
-
-static void event_handler_checked_cb_main_cb_1(lv_event_t *e) {
-    lv_obj_t *ta = lv_event_get_target(e);
-    if (lv_obj_has_state(ta, LV_STATE_CHECKED)) {
-        action_cb_checked(e);
-    }
-}
 
 void create_screen_main() {
     lv_obj_t *obj = lv_obj_create(0);
@@ -60,7 +52,6 @@ void create_screen_main() {
             lv_obj_set_pos(obj, 112, 64);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_checkbox_set_text(obj, "OFF");
-            lv_obj_add_event_cb(obj, event_handler_checked_cb_main_cb_1, LV_EVENT_VALUE_CHANGED, (void *)0);
             lv_obj_add_event_cb(obj, action_cb_value_changed, LV_EVENT_VALUE_CHANGED, (void *)0);
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_AUTO, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(obj, &ui_font_ds25, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -88,7 +79,7 @@ void create_screen_main() {
             lv_obj_set_pos(obj, 175, 113);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_text_font(obj, &ui_font_ds25, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text(obj, "lbl_on_off");
+            lv_label_set_text(obj, "--");
         }
     }
     

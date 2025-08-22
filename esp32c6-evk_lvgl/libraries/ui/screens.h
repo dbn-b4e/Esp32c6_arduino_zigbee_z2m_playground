@@ -15,9 +15,9 @@ typedef struct _objects_t {
     lv_obj_t *fifth;
     lv_obj_t *sixt;
     lv_obj_t *seventh;
-    lv_obj_t *cb_1;
     lv_obj_t *lbl_counter;
     lv_obj_t *spin_loading;
+    lv_obj_t *cb_1;
     lv_obj_t *btn_onoff_1;
     lv_obj_t *prg_1;
     lv_obj_t *lbl_on_off;
